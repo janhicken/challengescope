@@ -1,0 +1,25 @@
+{
+  "name": "challengescope",
+  "authors": [
+    "Jan Hicken <jan.hicken@posteo.de>"
+  ],
+  "description": "",
+  "main": "index.html",
+  "keywords": [
+    "challenge"
+  ],
+  "license": "Apache",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "dagre-d3": "^0.4.17"
+  }
+}

@@ -1,0 +1,27 @@
+#graph {
+    width: 100%;
+}
+
+#graph .nodes .node rect {
+    stroke: black;
+    fill: white;
+}
+
+#graph .nodes .node.btn-default rect {
+    stroke: #ccc;
+}
+
+#graph .nodes .node.btn-default:hover rect {
+    fill: #e6e6e6;
+    stroke: #adadad;
+}
+
+#graph .nodes .node.active rect {
+    fill: #e6e6e6;
+    stroke: #adadad;
+    filter: drop-shadow(0 3px 5px rgba(0, 0, 0, .125));
+}
+
+#graph .edgePaths .path {
+    stroke: black;
+}

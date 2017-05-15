@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Challengescope</title>
+
+    <!-- Libraries -->
+    <script type="text/javascript" src="bower_components/d3/d3.js"></script>
+    <script type="text/javascript" src="bower_components/lodash/lodash.js"></script>
+    <script type="text/javascript" src="bower_components/graphlib/dist/graphlib.core.js"></script>
+    <script type="text/javascript" src="bower_components/dagre/dist/dagre.core.js"></script>
+    <script type="text/javascript" src="bower_components/dagre-d3/dist/dagre-d3.core.js"></script>
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="bower_components/bootstrap-growl/jquery.bootstrap-growl.min.js"></script>
+
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+
+    <!-- own stuff -->
+    <script type="text/javascript" src="js/challengescope.js"></script>
+    <link rel="stylesheet" href="css/challengescope.css">
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Challengescope</a>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="form-inline">
+        <div class="form-group">
+            <label class="sr-only" for="nameInput">Name</label>
+            <input id="nameInput" type="text" class="form-control" placeholder="Name">
+        </div>
+        <button id="addNameBtn" type="submit" class="btn btn-success">
+            <span class="glyphicon glyphicon-plus"></span>
+        </button>
+    </div>
+</div>
+<hr>
+<div class="container">
+    <svg id="graph"></svg>
+</div>
+</body>
+</html>
