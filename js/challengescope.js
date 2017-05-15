@@ -67,9 +67,12 @@ function ChallengeGraph(containerSelector) {
     document.addEventListener("DOMContentLoaded", function () {
         var challgengeGraph = new ChallengeGraph("#graph");
 
-        document.getElementById("addNameBtn").addEventListener("click", function () {
-            var name = document.getElementById("nameInput").value;
+        document.getElementById("nameForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            var input = document.getElementById("nameInput");
+            var name = input.value;
             challgengeGraph.addPlayer(new Player(name));
+            input.value = "";
         });
 
     });
