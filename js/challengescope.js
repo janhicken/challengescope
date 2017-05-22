@@ -93,7 +93,7 @@ function ChallengeGraph(containerSelector) {
         var nameForm = document.getElementById("nameForm");
         nameForm.addEventListener("submit", function (e) {
             e.preventDefault();
-            challengeGraph.addPlayer(new Player(nameForm["name"].value, parseInt(nameForm["points"].value)));
+            challengeGraph.addPlayer(new Player(nameForm.name.value, parseInt(nameForm.points.value)));
             nameForm.reset();
         });
 
@@ -101,21 +101,24 @@ function ChallengeGraph(containerSelector) {
         var pointsDiv = document.getElementById("pointsDiv");
         pointsForm.addEventListener("submit", function (e) {
             e.preventDefault();
-            challengeGraph.setSelectedPlayerPoints(parseInt(pointsForm["points"].value));
+            challengeGraph.setSelectedPlayerPoints(parseInt(pointsForm.points.value));
             challengeGraph.clearSelection();
+            pointsForm.points.focus();
         });
         pointsForm["x2"].addEventListener("click", function () {
-            var previous = parseInt(pointsForm["points"].value);
-            pointsForm["points"].value = previous * 2;
+            var previous = parseInt(pointsForm.points.value);
+            pointsForm.points.value = previous * 2;
+            challengeGraph.setSelectedPlayerPoints(parseInt(pointsForm.points.value));
         });
         pointsForm["=0"].addEventListener("click", function () {
-            pointsForm["points"].value = 0;
+            pointsForm.points.value = 0;
+            challengeGraph.setSelectedPlayerPoints(parseInt(pointsForm.points.value));
         });
 
         var selectedPlayerP = document.getElementById("selectedPlayer");
         challengeGraph.onselect = function (player) {
             selectedPlayerP.textContent = player.name;
-            pointsForm["points"].value = player.points;
+            pointsForm.points.value = player.points;
             pointsDiv.style.display = "block";
         };
 
