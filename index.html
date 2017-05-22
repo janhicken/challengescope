@@ -13,7 +13,6 @@
     <script type="text/javascript" src="bower_components/dagre/dist/dagre.core.js"></script>
     <script type="text/javascript" src="bower_components/dagre-d3/dist/dagre-d3.core.js"></script>
     <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="bower_components/bootstrap-growl/jquery.bootstrap-growl.min.js"></script>
 
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
 
@@ -27,20 +26,38 @@
         <div class="navbar-header">
             <a class="navbar-brand" href="#">Challengescope</a>
         </div>
+        <div class="navbar-left">
+            <p class="navbar-text">Add:</p>
+            <form id="nameForm" class="navbar-form navbar-left">
+                <div class="form-group">
+                    <label class="sr-only" for="nameForm-name">Name</label>
+                    <input id="nameForm-name" name="name" type="text" class="form-control" placeholder="Name" required>
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="nameForm-points">Punkte</label>
+                    <input id="nameForm-points" name="points" type="number" class="form-control" placeholder="Punkte"
+                           value="40" required>
+                </div>
+                <button type="submit" class="btn btn-success">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </form>
+        </div>
+        <div id="pointsDiv" class="navbar-right" style="display: none">
+            <p id="selectedPlayer" class="navbar-text"></p>
+            <form id="pointsForm" class="navbar-form navbar-left">
+                <div class="form-group">
+                    <label class="sr-only" for="pointsForm-points">Punkte</label>
+                    <input id="pointsForm-points" name="points" type="number" placeholder="Punkte" required
+                           class="form-control">
+                </div>
+                <button name="x2" type="button" class="btn btn-default">&times;2</button>
+                <button name="=0" type="button" class="btn btn-default">=0</button>
+                <button name="submit" type="submit" class="btn btn-primary">OK</button>
+            </form>
+        </div>
     </div>
 </nav>
-<div class="container">
-    <form id="nameForm" class="form-inline">
-        <div class="form-group">
-            <label class="sr-only" for="nameInput">Name</label>
-            <input id="nameInput" type="text" class="form-control" placeholder="Name">
-        </div>
-        <button type="submit" class="btn btn-success">
-            <span class="glyphicon glyphicon-plus"></span>
-        </button>
-    </form>
-</div>
-<hr>
 <div class="container">
     <svg id="graph"></svg>
 </div>
