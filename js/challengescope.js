@@ -89,13 +89,39 @@ function ChallengeGraph(containerSelector) {
         }
     }.bind(this);
 
+    var handleNodeMiddleClick = function (id) {
+        graph.removeNode(id);
+        refresh();
+    };
+
+    var handleNodeMouseDown = function (id) {
+        if (d3.event.button === 0)
+            handleNodeClick(id);
+        else if (d3.event.button === 1)
+            handleNodeMiddleClick(id)
+    };
+
+    var handleEdgeMiddleClick = function (edge) {
+        graph.removeEdge(edge.v, edge.w);
+        refresh();
+    };
+
+    var handleEdgeMouseDown = function (edge) {
+        if (d3.event.button === 1) {
+            handleEdgeMiddleClick(edge);
+        }
+    };
+
     var refresh = function () {
         render(d3Container, graph);
         d3Container.selectAll(".node")
-            .on("click", handleNodeClick)
+            .on("mousedown", handleNodeMouseDown)
             .select("rect")
             .attr("rx", "4px")
             .attr("ry", "4px");
+
+        d3Container.selectAll(".edgePath")
+            .on("mousedown", handleEdgeMouseDown);
 
         d3Container.selectAll(".node.crown").each(function () {
             var size = 20;
@@ -158,6 +184,10 @@ function ChallengeGraph(containerSelector) {
         });
         pointsForm.crown.addEventListener("click", function () {
             this.classList.toggle("active");
+            challengeGraph.editPlayer(
+                parseInt(pointsForm.points.value),
+                pointsForm.crown.classList.contains("active"));
+            challengeGraph.clearSelection();
         });
 
         var selectedPlayerP = document.getElementById("selectedPlayer");
