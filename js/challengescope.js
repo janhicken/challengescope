@@ -1,8 +1,9 @@
 "use strict";
 
-function Player(name, points) {
+function Player(name, points, hasCrown) {
     this.name = name;
     this.points = points;
+    this.hasCrown = hasCrown;
 }
 
 function ChallengeGraph(containerSelector) {
@@ -11,6 +12,20 @@ function ChallengeGraph(containerSelector) {
     var container = document.querySelector(containerSelector);
     var d3Container = d3.select(container);
     var render = new dagreD3.render();
+
+    var createPlayerLabel = function (playerName) {
+        var player = players[playerName];
+        var label = {
+            label: playerName + " (" + player.points + ")",
+            class: "btn btn-default"
+        };
+        if (player.hasCrown) {
+            label.class += " crown"
+        }
+
+        return label;
+    };
+
     var graph = new dagreD3.graphlib.Graph()
         .setGraph({
             transition: function (selection) {
@@ -20,12 +35,12 @@ function ChallengeGraph(containerSelector) {
         .setDefaultEdgeLabel(function () {
             return {};
         })
-        .setDefaultNodeLabel(function (id) {
-            return {label: createPlayerLabel(id), class: "btn btn-default"};
-        });
+        .setDefaultNodeLabel(createPlayerLabel);
 
-    this.onselect = function () {};
-    this.onclearselect = function () {};
+    this.onselect = function () {
+    };
+    this.onclearselect = function () {
+    };
 
     this.addPlayer = function (player) {
         players[player.name] = player;
@@ -33,9 +48,15 @@ function ChallengeGraph(containerSelector) {
         refresh();
     };
 
-    this.setSelectedPlayerPoints = function (points) {
+    this.editPlayer = function (points, hasCrown) {
         players[selectedNode].points = points;
-        graph.node(selectedNode).label = createPlayerLabel(selectedNode);
+        players[selectedNode].hasCrown = hasCrown;
+        var playerLabel = createPlayerLabel(selectedNode);
+        var wasActive = graph.node(selectedNode).class.includes("active");
+
+        graph.node(selectedNode).label = playerLabel.label;
+        graph.node(selectedNode).class = playerLabel.class;
+        if (wasActive) graph.node(selectedNode).class += " active";
         refresh();
     };
 
@@ -45,10 +66,6 @@ function ChallengeGraph(containerSelector) {
         refresh();
         this.onclearselect();
     }.bind(this);
-
-    var createPlayerLabel = function (playerName) {
-        return playerName + " (" + players[playerName].points + ")"
-    };
 
     var selectPlayer = function (playerName) {
         selectedNode = playerName;
@@ -80,11 +97,24 @@ function ChallengeGraph(containerSelector) {
             .attr("rx", "4px")
             .attr("ry", "4px");
 
+        d3Container.selectAll(".node.crown").each(function () {
+            var size = 20;
+            var g = d3.select(this);
+            var rect = g.select("rect");
+            g.insert("image")
+                .attr("href", "img/crown.svg")
+                .attr("x", -size / 2)
+                .attr("y", rect.attr("y") - rect.attr("height") / 2)
+                .attr("width", size)
+                .attr("height", size);
+        });
+
         container.setAttribute("height", graph.graph().height + 40);
         var xOffset = (container.width.baseVal.value - graph.graph().width) / 2;
         container.querySelector("g").setAttribute("transform", "translate(" + xOffset + ", 20)")
     };
 }
+
 
 (function () {
     document.addEventListener("DOMContentLoaded", function () {
@@ -93,7 +123,12 @@ function ChallengeGraph(containerSelector) {
         var nameForm = document.getElementById("nameForm");
         nameForm.addEventListener("submit", function (e) {
             e.preventDefault();
-            challengeGraph.addPlayer(new Player(nameForm.name.value, parseInt(nameForm.points.value)));
+            var newPlayer = new Player(
+                nameForm.name.value,
+                parseInt(nameForm.points.value),
+                false);
+
+            challengeGraph.addPlayer(newPlayer);
             nameForm.reset();
         });
 
@@ -101,18 +136,28 @@ function ChallengeGraph(containerSelector) {
         var pointsDiv = document.getElementById("pointsDiv");
         pointsForm.addEventListener("submit", function (e) {
             e.preventDefault();
-            challengeGraph.setSelectedPlayerPoints(parseInt(pointsForm.points.value));
+            challengeGraph.editPlayer(
+                parseInt(pointsForm.points.value),
+                pointsForm.crown.classList.contains("active"));
             challengeGraph.clearSelection();
             pointsForm.points.focus();
         });
         pointsForm["x2"].addEventListener("click", function () {
             var previous = parseInt(pointsForm.points.value);
             pointsForm.points.value = previous * 2;
-            challengeGraph.setSelectedPlayerPoints(parseInt(pointsForm.points.value));
+            challengeGraph.editPlayer(
+                parseInt(pointsForm.points.value),
+                pointsForm.crown.classList.contains("active"));
         });
         pointsForm["=0"].addEventListener("click", function () {
             pointsForm.points.value = 0;
-            challengeGraph.setSelectedPlayerPoints(parseInt(pointsForm.points.value));
+            challengeGraph.editPlayer(
+                parseInt(pointsForm.points.value),
+                pointsForm.crown.classList.contains("active"));
+            challengeGraph.clearSelection();
+        });
+        pointsForm.crown.addEventListener("click", function () {
+            this.classList.toggle("active");
         });
 
         var selectedPlayerP = document.getElementById("selectedPlayer");
@@ -120,12 +165,13 @@ function ChallengeGraph(containerSelector) {
             selectedPlayerP.textContent = player.name;
             pointsForm.points.value = player.points;
             pointsDiv.style.display = "block";
+            if (player.hasCrown) pointsForm.crown.classList.add("active");
         };
 
         challengeGraph.onclearselect = function () {
-            console.log("onclearselect");
             pointsForm.reset();
             pointsDiv.style.display = "none";
+            pointsForm.crown.classList.remove("active");
         };
 
         document.addEventListener("keydown", function (e) {
