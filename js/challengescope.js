@@ -128,7 +128,7 @@ function ChallengeGraph(containerSelector) {
             var g = d3.select(this);
             var rect = g.select("rect");
             g.insert("image")
-                .attr("href", "img/crown.svg")
+                .attr("href", "img/crown.png")
                 .attr("x", -size / 2)
                 .attr("y", rect.attr("y") - rect.attr("height") / 2)
                 .attr("width", size)
